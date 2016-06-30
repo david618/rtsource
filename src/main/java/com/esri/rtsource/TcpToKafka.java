@@ -21,7 +21,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
  *
  * @author david
  */
-public class Tcp2Kafka {
+public class TcpToKafka {
     
     // TCP port to open and listen on
     private Integer port;
@@ -38,14 +38,14 @@ public class Tcp2Kafka {
     private Producer<String, String> producer;
     
 
-    public Tcp2Kafka(Integer port, String brokers, String topic) {
+    public TcpToKafka(Integer port, String brokers, String topic) {
         this.port = port;  
         this.topic = topic;
     
         try {
             Properties props = new Properties();
             props.put("bootstrap.servers",brokers);
-            props.put("client.id", Tcp2Kafka.class.getName());
+            props.put("client.id", TcpToKafka.class.getName());
             props.put("acks", "1");
             props.put("retries", 0);
             props.put("batch.size", 16384);
@@ -139,7 +139,16 @@ public class Tcp2Kafka {
     
     
     public static void main(String args[]) {
-        Tcp2Kafka tcp = new Tcp2Kafka(5565, "d1.trinity.dev:9092", "faa-stream");
-        tcp.listen();
+        
+        if (args.length != 3) {
+            System.err.print("Usage: rtsource <port-to-listen-on> <broker-list> <topic>\n");
+        } else {
+            TcpToKafka t = new TcpToKafka(Integer.parseInt(args[0]), args[1], args[2]);
+            t.listen();
+        }
+                
+        
+//        TcpToKafka tcp = new TcpToKafka(5565, "d1.trinity.dev:9092", "faa-stream");
+//        tcp.listen();
     }
 }
