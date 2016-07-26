@@ -32,15 +32,20 @@ public class TcpToKafka {
     // Topic 
     private String topic;
     
+    // Web Port
+    private Integer webport;
     
     private BufferedReader in;
     private ServerSocket srvr;
     private Producer<String, String> producer;
     
+    
+    
 
-    public TcpToKafka(Integer port, String brokers, String topic) {
+    public TcpToKafka(Integer port, String brokers, String topic, Integer webport) {
         this.port = port;  
         this.topic = topic;
+        this.webport = webport;
     
         try {
             Properties props = new Properties();
@@ -55,6 +60,9 @@ public class TcpToKafka {
             props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
             
             this.producer = new KafkaProducer<>(props);
+            
+            WebServer server = new WebServer(webport);
+            
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,10 +148,10 @@ public class TcpToKafka {
     
     public static void main(String args[]) {
         
-        if (args.length != 3) {
-            System.err.print("Usage: rtsource <port-to-listen-on> <broker-list> <topic>\n");
+        if (args.length != 4) {
+            System.err.print("Usage: rtsource <port-to-listen-on> <broker-list> <topic> <web-port>\n");
         } else {
-            TcpToKafka t = new TcpToKafka(Integer.parseInt(args[0]), args[1], args[2]);
+            TcpToKafka t = new TcpToKafka(Integer.parseInt(args[0]), args[1], args[2], Integer.parseInt(args[3]));
             t.listen();
         }
                 
