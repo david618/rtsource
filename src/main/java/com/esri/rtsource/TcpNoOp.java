@@ -39,6 +39,8 @@ public class TcpNoOp {
     
     public static void main(String args[]) {
         
+        //Command Line Options Example: 5565 9000
+        
         if (args.length != 2) {
             System.err.print("Usage: TcpNoOp <port-to-listen-on> <web-port>\n");
         } else {
