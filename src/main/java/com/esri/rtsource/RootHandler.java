@@ -1,4 +1,9 @@
+/*
+This class is used in Marathon to setup response for Health Check.
 
+Additional code could be added to check rtsource and return errors so Marathon can restart if needed.
+
+*/
 package com.esri.rtsource;
 
 import com.sun.net.httpserver.HttpExchange;
