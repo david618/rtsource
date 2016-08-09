@@ -1,6 +1,8 @@
 /*
 
-TcpServerKafka is the listener for TcpToKafka.  Instance of this class starts when client connects.
+TcpServerKafka is the listener for TcpKafka.  
+
+Instance of this class starts when client connects.
 
 Listens on TCP port for messages and writes them to Kafka.
 
@@ -24,11 +26,13 @@ public class TcpServerKafka extends Thread {
     private Socket socket = null;
     private Producer<String, String> producer;
     private String topic;
+    private WebServer server;
     
-    public TcpServerKafka(Socket socket, Producer<String, String> producer, String topic) {
+    public TcpServerKafka(Socket socket, Producer<String, String> producer, String topic, WebServer server) {
         this.socket = socket;
         this.producer = producer;
         this.topic = topic;
+        this.server = server;
     }
     
     @Override
@@ -72,6 +76,10 @@ public class TcpServerKafka extends Thread {
                 rcvRate = (double) cnt / elapsedSeconds;                
             }                
 
+            server.setCnt(cnt);
+            server.setRate(rcvRate);
+            server.setTm(System.currentTimeMillis());
+            
             System.out.println(cnt + "," + rcvRate);
 
             this.socket.close();
