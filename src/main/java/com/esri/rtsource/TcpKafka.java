@@ -21,7 +21,7 @@ import org.apache.kafka.clients.producer.Producer;
  */
 public class TcpKafka {
 
-    public TcpKafka(Integer port, String brokers, String topic, Integer webport) {
+    public TcpKafka(Integer port, String brokers, String topic, Integer webport, boolean calcLatency) {
     
         try {
             Properties props = new Properties();
@@ -46,7 +46,7 @@ public class TcpKafka {
             
             while (true) {
                 Socket cs = ss.accept();
-                TcpServerKafka ts = new TcpServerKafka(cs, producer, topic, server);
+                TcpServerKafka ts = new TcpServerKafka(cs, producer, topic, server, calcLatency);
                 ts.start();
             }
 
@@ -59,9 +59,23 @@ public class TcpKafka {
     public static void main(String args[]) throws Exception {
         
         // Command Line 5565 d1.trinity.dev:9092 simFile 9000
-        
-        if (args.length != 4) {
-            System.err.print("Usage: TcpKafka <port-to-listen-on> <broker-list-or-hub-name> <topic> <web-port>\n");
+
+        /*
+        NOTE: For latency calculations ensure all servers including the server running simulation
+        are using time chrnonized.
+
+        Run this command simulatneously on machines to compare time
+        $ date +%s
+
+        NTP command force update now:  $ sudo ntpdate -s time.nist.gov
+        CHRONYD check status: $ chronyc tracking
+
+         */
+
+        int numargs = args.length;
+
+        if (numargs != 4 && numargs != 5) {
+            System.err.print("Usage: TcpKafka <port-to-listen-on> <broker-list-or-hub-name> <topic> <web-port> (<calc-latency>)\n");
         } else {
             
             String brokers = args[1];            
@@ -72,8 +86,11 @@ public class TcpKafka {
                 brokers = new MarathonInfo().getBrokers(brokers);
             }   // Otherwise assume it's brokers          
             
-            
-            TcpKafka t = new TcpKafka(Integer.parseInt(args[0]), brokers, args[2], Integer.parseInt(args[3]));
+            if (numargs == 4) {
+                TcpKafka t = new TcpKafka(Integer.parseInt(args[0]), brokers, args[2], Integer.parseInt(args[3]), false);
+            } else {
+                TcpKafka t = new TcpKafka(Integer.parseInt(args[0]), brokers, args[2], Integer.parseInt(args[3]), Boolean.parseBoolean(args[4]));
+            }
 
         }
                 

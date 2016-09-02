@@ -22,11 +22,13 @@ public class RootHandler implements HttpHandler {
 
     static ArrayList<Long> cnts = new ArrayList<>();
     static ArrayList<Double> rates = new ArrayList<>();
+    static ArrayList<Double> latencies = new ArrayList<>();
     static long tm = System.currentTimeMillis();
 
     public static void reset() {
         cnts = new ArrayList<>();
         rates = new ArrayList<>();
+        latencies = new ArrayList<>();
         tm = System.currentTimeMillis();
     }
     
@@ -36,6 +38,10 @@ public class RootHandler implements HttpHandler {
 
     public static void addRate(double rate) {
         rates.add(rate);
+    }
+
+    public static void addLatency(double latency) {
+        latencies.add(latency);
     }
 
     public static void setTm(long tm) {
@@ -55,7 +61,8 @@ public class RootHandler implements HttpHandler {
                 // Return count
                 obj.put("tm", tm);
                 obj.put("counts", cnts.toArray());    
-                obj.put("rates", rates.toArray());             
+                obj.put("rates", rates.toArray());
+                obj.put("latencies", latencies.toArray());
             } else if (uriPath.equalsIgnoreCase("/reset") || uriPath.equalsIgnoreCase("/reset/")) {
                 // Reset counts
                 reset();
