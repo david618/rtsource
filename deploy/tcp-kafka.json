@@ -1,0 +1,34 @@
+{
+  "id": "/tcp-kafka",
+  "cmd": "$MESOS_SANDBOX/jre1.8.0_91/bin/java -cp $MESOS_SANDBOX/rtsource.jar com.esri.rtsource.TcpKafka 5565 172.16.0.4:9092 simFile $PORT0 true",
+  "cpus": 1.5,
+  "mem": 2560,
+  "disk": 0,
+  "instances": 0,
+  "constraints": [
+    [
+      "hostname",
+      "UNIQUE"
+    ]
+  ],
+  "healthChecks": [
+    {
+      "path": "/",
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 60,
+      "timeoutSeconds": 20,
+      "maxConsecutiveFailures": 3,
+      "ignoreHttp1xx": false
+    }
+  ],
+  "labels": {
+    "HAPROXY_GROUP": "external"
+  },
+  "uris": [
+    "http://172.16.0.5/apps/jre-8u91-linux-x64.tar.gz",
+    "http://172.16.0.5/apps/rtlib.tgz",
+    "http://172.16.0.5/apps/rtsource.jar"
+  ]
+}
