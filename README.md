@@ -32,7 +32,6 @@ TcpNoOp - Listens on TCP socket and counts events
 
 TcpNoOp listens on a specified port (e.g. 5565). The app counts the number of lines received and calculates rate. After input stop it outputs the count and reate.  The count and reate are also available on the web-port. (http://localhost:14001/count).
 
-
 This app can also be ran in Mesos/Marathon.  http://davidssysadminnotes.blogspot.com/2016/08/performance-testing-kafka-on-dcos.html 
 
 Additional classes are in development to support other sources.
