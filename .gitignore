@@ -15,5 +15,3 @@ hs_err_pid*
 
 target/*
 nbactions.xml
-/TestApp/nbproject/private/
-/TestApp/build/
