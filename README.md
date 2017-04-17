@@ -1,3 +1,9 @@
+# Retired
+
+This project as merged with rtsink and development will continue under name [rt](https://github.com/david618/rt/).
+
+
+
 # rtsource
 
 Test sources for real time DCOS/Mesos/Marathon apps.
